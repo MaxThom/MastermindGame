@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en" style="height:100%;">
+<head>
+    <meta charset="utf-8">
+    <title>The Mastermind Game</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="icon" href="https://apprecs.org/ios/images/app-icons/256/79/318226297.jpg">
+
+    <noscript><style> .jsonly { display: none } </style></noscript>
+
+    <script>
+        var colors = ["red", "blue", "yellow", "green", "white", "black"];
+        var color1 = -1;
+        var color2 = -1;
+        var color3 = -1;
+        var color4 = -1;
+        var rounds = 1;
+
+        function chooseColor(element, colorIndex) {
+            if (window[colorIndex] === -1) {
+                $(element).removeClass('gray');
+                window[colorIndex] = 0;
+                $(element).addClass(colors[window[colorIndex]]);
+            } else {
+                $(element).removeClass(colors[window[colorIndex]]);  
+
+                ++window[colorIndex];
+                if (window[colorIndex] === colors.length)
+                    window[colorIndex] = 0;
+
+                $(element).addClass(colors[window[colorIndex]]);
+            }            
+        }
+        
+        function sendColor() {
+            var ajaxRequest = new XMLHttpRequest();
+            ajaxRequest.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    
+                    $( "#circle_" + rounds + "_1").removeClass('gray').addClass(colors[color1]);
+                    $( "#circle_" + rounds + "_2").removeClass('gray').addClass(colors[color2]);
+                    $( "#circle_" + rounds + "_3").removeClass('gray').addClass(colors[color3]);
+                    $( "#circle_" + rounds + "_4").removeClass('gray').addClass(colors[color4]);
+                
+                    var goodPos = 2;
+                    var goodCol = 1;
+                    var overallIndex = 0;
+                    while (goodPos != 0) {
+                        goodPos--;
+                        overallIndex++
+                        $( "#mcircle_" + rounds + "_" + overallIndex).removeClass('gray').addClass('red');
+                    }
+                    while (goodCol != 0) {
+                        goodCol--;
+                        overallIndex++
+                        $( "#mcircle_" + rounds + "_" + overallIndex).removeClass('gray').addClass('white');
+                    }
+
+                    ++rounds;
+                    
+                }
+            };
+
+            ajaxRequest.open("GET", "/play.html?color1=" + colors[color1] + "&color2=" + colors[color2] + "&color3=" + colors[color3]+ "&color4=" + colors[color4], true);
+            ajaxRequest.send();           
+        }
+
+        
+    </script>
+
+    <style>
+        .circle {
+            -moz-border-radius: 50px/50px;
+            -webkit-border-radius: 50px 50px;
+            border-radius: 50px/50px;
+            border: solid 2px #000000;
+            width: 25px;
+            height: 25px;       
+        }
+        .small-circle {
+            -moz-border-radius: 50px/50px;
+            -webkit-border-radius: 50px 50px;
+            border-radius: 50px/50px;
+            border: solid 1px #000000;
+            width: 10px;
+            height: 10px;   
+            margin-top: 7px;         
+        }
+        .red {
+            background: red;
+        }
+        .blue {
+            background: cyan;
+        }
+        .green {
+            background: greenyellow;
+        }
+        .yellow {
+            background: yellow;
+        }
+        .black {
+            background: black;
+        }
+        .white {
+            background: white;
+        }
+        .gray {
+            background: gray;
+        }
+        .row-circle {
+             height:30px;
+        }
+    </style>    
+</head>
+
+<body style="background-color:beige;height:100%">
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <div class="col-md-2"></div>
+            <div class="col-md-8" style="background-color:bisque;">
+                <div class="row justify-content-center">
+                    <div class="col-md-12 text-center">
+                        <h1 class="display-4">The Mastermind Game !</h1>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_1_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_1_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_1_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_1_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div id="mcircle_1_1" class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div id="mcircle_1_2" class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div id="mcircle_1_3" class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div id="mcircle_1_4" class="small-circle gray"></div></div>
+                        </div>
+                        
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_2_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_2_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_2_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_2_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                        </div>
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_3_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_3_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_3_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_3_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                        </div>
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_4_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_4_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_4_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_4_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                        </div>
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_5_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_5_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_5_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_5_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                        </div> 
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_6_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_6_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_6_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_6_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                        </div>  
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_7_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_7_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_7_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_7_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                        </div> 
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_8_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_8_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_8_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_8_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                        </div>  
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_9_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_9_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_9_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_9_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                        </div> 
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_10_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_10_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_10_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_10_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                        </div> 
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_11_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_11_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_11_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_11_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                        </div>
+                        <div class="row row-circle">                            
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"><div id="circle_12_1" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_12_2" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_12_3" class="circle gray"></div></div>
+                            <div class="col-md-1"><div id="circle_12_4" class="circle gray"></div></div>   
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                            <div class="col-md-1"><div class="small-circle gray"></div></div>
+                        </div>                                               
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <span class="jsonly">
+                            <h4>Your next guest ...</h4>
+                            <div class="row">
+                                <div class="col-md-1"><div class="circle gray" onclick="chooseColor(this, 'color1');"></div></div>
+                                <div class="col-md-1"><div class="circle gray" onclick="chooseColor(this, 'color2');"></div></div>
+                                <div class="col-md-1"><div class="circle gray" onclick="chooseColor(this, 'color3');"></div></div>
+                                <div class="col-md-1"><div class="circle gray" onclick="chooseColor(this, 'color4');"></div></div>
+                            </div>
+                            <br>
+                            <button type="button" class="btn btn-primary" onclick="sendColor();">Submit</button>
+                        </span>
+                        <noscript>
+                            <form>
+                                <h4>Your next guest ...</h4>
+                                <label for="color1"> Color 1 :</label>
+                                <select name="color1" id="color1">
+                                    <option value="red">Red</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="yellow">Yellow</option>
+                                    <option value="green">Green</option>
+                                    <option value="white">White</option>
+                                    <option value="black">Black</option>
+                                </select>
+                                <br>
+                                <label for="color2"> Color 2 :</label>
+                                <select name="color2" id="color2">
+                                    <option value="red">Red</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="yellow">Yellow</option>
+                                    <option value="green">Green</option>
+                                    <option value="white">White</option>
+                                    <option value="black">Black</option>
+                                </select>
+                                <br>
+                                <label for="color3"> Color 3 :</label>
+                                <select name="color3" id="color3">
+                                    <option value="red">Red</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="yellow">Yellow</option>
+                                    <option value="green">Green</option>
+                                    <option value="white">White</option>
+                                    <option value="black">Black</option>
+                                </select>
+                                <br>
+                                <label for="color4"> Color 4 :</label>
+                                <select name="color4" id="color4">
+                                    <option value="red">Red</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="yellow">Yellow</option>
+                                    <option value="green">Green</option>
+                                    <option value="white">White</option>
+                                    <option value="black">Black</option>
+                                </select>
+                                <br>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </noscript>
+                    </div>
+                </div>
+                
+
+            </div>
+            <div class="col-md-2"></div>
+        </div>                     
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
